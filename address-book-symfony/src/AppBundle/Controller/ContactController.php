@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Contact;
 use AppBundle\Form\ContactType;
+use AppBundle\Manager\ContactManager;
+use Monolog\Logger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ContactController extends Controller
 {
+    /** @var ContactManager */
+    protected $contactManager;
+
+    /**
+     * ContactController constructor.
+     * @param ContactManager $contactManager
+     */
+    public function __construct(ContactManager $contactManager)
+    {
+        $this->contactManager = $contactManager;
+    }
+
     /**
      * @Route("/")
      */
@@ -34,7 +48,7 @@ class ContactController extends Controller
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $contact = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
@@ -59,8 +73,7 @@ class ContactController extends Controller
      */
     public function showAction($id)
     {
-        $repo = $this->getDoctrine()->getRepository('AppBundle:Contact');
-        $contact = $repo->find($id);
+        $contact = $this->contactManager->getById($id);
 
         return $this->render('AppBundle:Contact:show.html.twig', [
             'contact' => $contact
@@ -79,7 +92,7 @@ class ContactController extends Controller
         $form->setData($contact);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $contact = $form->getData();
 
             $em = $this->getDoctrine()->getManager();

@@ -55,7 +55,7 @@ class Contact
     /**
      * @var Company
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="contacts")
      */
     protected $company;
 
@@ -188,4 +188,11 @@ class Contact
     {
         return $this->company;
     }
+
+    public function __toString()
+    {
+        return "$this->firstName $this->lastName";
+    }
+
+
 }

@@ -36,6 +36,20 @@ class Company
     protected $city;
 
 
+    /**
+     * @var Contact[]
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Contact", mappedBy="company")
+     */
+    protected $contacts;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -94,4 +108,46 @@ class Company
     {
         return $this->city;
     }
+
+
+    /**
+     * Add contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     *
+     * @return Company
+     */
+    public function addContact(\AppBundle\Entity\Contact $contact)
+    {
+        $this->contacts[] = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Remove contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     */
+    public function removeContact(\AppBundle\Entity\Contact $contact)
+    {
+        $this->contacts->removeElement($contact);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
 }

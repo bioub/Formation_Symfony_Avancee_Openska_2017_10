@@ -16,4 +16,15 @@
     </div>
   {% endif %}
 
+  {% if company.contacts %}
+    <div class="row mb-2">
+      <div class="col-md-2">
+        <b>Contacts</b>
+      </div>
+      <div class="col-md-10">
+        {{ company.contacts | join(', ') }}
+      </div>
+    </div>
+  {% endif %}
+
 {% endblock %}

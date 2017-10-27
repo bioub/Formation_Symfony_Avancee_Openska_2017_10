@@ -3,11 +3,14 @@
 namespace Tests\AppBundle\Controller;
 
 
+use AppBundle\Controller\ContactController;
 use AppBundle\Entity\Contact;
+use AppBundle\Manager\ContactManager;
 use AppBundle\Repository\ContactRepository;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Tests\CrawlerTest;
 
 class ContactControllerTest extends WebTestCase
 {
@@ -66,6 +69,7 @@ class ContactControllerTest extends WebTestCase
         $this->assertContains('Bill Gates', $h2Content);
     }
 
+    /*
     public function testShowActionContainsDataAvecMock()
     {
         $mockContactRepository = $this->getMockBuilder(ContactRepository::class)
@@ -91,6 +95,27 @@ class ContactControllerTest extends WebTestCase
 
         $this->client->getContainer()->set('doctrine', $mockRegistry);
 
+
+        $crawler = $this->client->request('GET', '/contacts/1');
+        $h2Content = $crawler->filter('div.container > h2:first-child')->text();
+        $this->assertContains('Jean Dupont', $h2Content);
+    }
+    */
+
+    public function testShowActionContainsDataWithMock()
+    {
+        $contact = new Contact();
+        $contact->setFirstName('Jean')->setLastName('Dupont');
+
+        $mockContactManager = $this->prophesize(ContactManager::class);
+        $mockContactManager->getById("1")->willReturn($contact);
+
+        // Pour remplacer le vrai ContactManager par le faux
+        // il faut écrire ceci, et pour cela nos services doit être publics
+        $this->client->getContainer()->set(
+            ContactManager::class,
+            $mockContactManager->reveal()
+        );
 
         $crawler = $this->client->request('GET', '/contacts/1');
         $h2Content = $crawler->filter('div.container > h2:first-child')->text();
