@@ -1,0 +1,6 @@
+services:
+    openska_bootstrap4.twig.flash_alert_extension:
+        class: Openska\Bootstrap4Bundle\Twig\FlashAlertExtension
+        arguments: ["@session"]
+        tags:
+            - twig.extension

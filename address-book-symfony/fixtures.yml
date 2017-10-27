@@ -1,0 +1,8 @@
+AppBundle\Entity\Contact:
+    user1:
+        firstName: Romain
+        lastName: Bohdanowicz
+        email: romain.bohdanowicz@gmail.com
+    user2:
+        firstName: Toto
+        lastName: Titi

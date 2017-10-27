@@ -1,3 +1,8 @@
+openska_alice:
+    resource: "@OpenskaAliceBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
